@@ -42,6 +42,10 @@ class UsersController < ApplicationController
     redirect_to users_path, notice: 'User was successfully deleted.'
   end
 
+  def balances
+    @users = User.includes(:paid_expenses, :expense_shares).all
+  end
+
   def user_params
     params.require(:user).permit(:name, :email)
   end

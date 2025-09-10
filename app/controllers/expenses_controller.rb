@@ -1,5 +1,5 @@
 class ExpensesController < ApplicationController
-  before_action :set_expense, only: [:show, :edit, :update, :destroy]
+  before_action :set_expense, only: %i[show edit update destroy]
 
   def index
     @expenses = Expense.all.includes(:paid_by)
@@ -32,6 +32,12 @@ class ExpensesController < ApplicationController
 
   def update
     if @expense.update(expense_params)
+      if params[:expense][:user_ids].present?
+        @expense.expense_shares.destroy_all
+        selected_users = User.where(id: params[:expense][:user_ids])
+        @expense.split_equally_among(selected_users)
+      end
+
       redirect_to @expense, notice: 'Expense was successfully updated.'
     else
       render :edit, status: :unprocessable_entity
@@ -50,6 +56,6 @@ class ExpensesController < ApplicationController
   end
 
   def expense_params
-    params.require(:expense).permit(:description, :amount, :date, :paid_by_id, user_ids: [])
+    params.require(:expense).permit(:description, :amount, :date, :paid_by_id)
   end
 end

@@ -1,0 +1,56 @@
+<h1>Balance Overview</h1>
+
+<div style="margin-bottom: 20px;">
+  <%= link_to 'New User', new_user_path %> |
+  <%= link_to 'New Expense', new_expense_path %> |
+  <%= link_to 'All Expenses', expenses_path %>
+</div>
+
+<table style="width: 100%; border-collapse: collapse;">
+  <thead>
+    <tr style="background-color: #f0f0f0;">
+      <th style="padding: 10px; border: 1px solid #ccc;">User</th>
+      <th style="padding: 10px; border: 1px solid #ccc;">Total Paid</th>
+      <th style="padding: 10px; border: 1px solid #ccc;">Total Owed</th>
+      <th style="padding: 10px; border: 1px solid #ccc;">Net Balance</th>
+      <th style="padding: 10px; border: 1px solid #ccc;">Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @users.each do |user| %>
+      <tr>
+        <td style="padding: 10px; border: 1px solid #ccc;">
+          <%= link_to user.name, user %>
+        </td>
+        <td style="padding: 10px; border: 1px solid #ccc;">
+          $<%= user.total_paid %>
+        </td>
+        <td style="padding: 10px; border: 1px solid #ccc;">
+          $<%= user.total_owed %>
+        </td>
+        <td style="padding: 10px; border: 1px solid #ccc; color: <%= user.net_balance >=
+0 ? 'green' : 'red' %>">
+          $<%= user.net_balance %>
+        </td>
+        <td style="padding: 10px; border: 1px solid #ccc;">
+          <% if user.net_balance > 0 %>
+            <span style="color: green;">Owed money</span>
+          <% elsif user.net_balance < 0 %>
+            <span style="color: red;">Owes money</span>
+          <% else %>
+            <span style="color: blue;">Settled up</span>
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<div style="margin-top: 20px;">
+  <h3>Quick Stats</h3>
+  <p><strong>Total Money Tracked:</strong> $<%= @users.sum(&:total_paid) %></p>
+  <p><strong>Users with Positive Balance:</strong> <%= @users.count { |u| u.net_balance >
+  0 } %></p>
+  <p><strong>Users with Negative Balance:</strong> <%= @users.count { |u| u.net_balance <
+  0 } %></p>
+</div>

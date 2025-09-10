@@ -1,2 +1,37 @@
-<h1>Users#show</h1>
-<p>Find me in app/views/users/show.html.erb</p>
+<h1><%= @user.name %></h1>
+
+<p>
+  <strong>Email:</strong>
+  <%= @user.email %>
+</p>
+
+<p>
+  <strong>Created:</strong>
+  <%= @user.created_at.strftime("%B %d, %Y") %>
+</p>
+
+<!-- Add balance information -->
+<div style="margin-top: 20px; padding: 15px; border: 1px solid #ccc;">
+  <h3>Financial Summary</h3>
+  <p><strong>Total Paid:</strong> $<%= @user.total_paid %></p>
+  <p><strong>Total Owed:</strong> $<%= @user.total_owed %></p>
+  <p><strong>Net Balance:</strong>
+    <span style="color: <%= @user.net_balance >= 0 ? 'green' : 'red' %>">
+      $<%= @user.net_balance %>
+    </span>
+    <% if @user.net_balance > 0 %>
+      (You are owed money)
+    <% elsif @user.net_balance < 0 %>
+      (You owe money)
+    <% else %>
+      (All settled up!)
+    <% end %>
+  </p>
+</div>
+
+<div>
+  <%= link_to 'Edit', edit_user_path(@user) %>
+  <%= link_to 'Delete', @user, data: { turbo_method: :delete },
+              confirm: 'Are you sure?' %>
+  <%= link_to 'Back to Users', users_path %>
+</div>

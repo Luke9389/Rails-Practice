@@ -1,8 +1,39 @@
- <h1><%= @expense.description %></h1>
+
+<h1><%= @expense.description %></h1>
 
 <p><strong>Amount:</strong> $<%= @expense.amount %></p>
 <p><strong>Date:</strong> <%= @expense.date.strftime("%B %d, %Y") %></p>
 <p><strong>Paid by:</strong> <%= @expense.paid_by.name %></p>
+
+<!-- Add expense sharing details -->
+<% if @expense.expense_shares.any? %>
+  <div style="margin-top: 20px; padding: 15px; border: 1px solid #ccc;">
+    <h3>Split Details</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Person</th>
+          <th>Amount Owed</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @expense.expense_shares.includes(:user).each do |share| %>
+          <tr>
+            <td><%= share.user.name %></td>
+            <td>$<%= share.amount_owed %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+    <p><strong>Total Split:</strong> $<%= @expense.total_shared_amount %></p>
+    <% if @expense.remaining_to_split > 0 %>
+      <p style="color: orange;"><strong>Remaining to Split:</strong> $<%=
+@expense.remaining_to_split %></p>
+    <% end %>
+  </div>
+<% else %>
+  <p style="color: orange;">This expense has not been split with anyone yet.</p>
+<% end %>
 
 <div>
   <%= link_to 'Edit', edit_expense_path(@expense) %>
