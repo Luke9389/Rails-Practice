@@ -10,7 +10,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_09_10_191625) do
+ActiveRecord::Schema[8.0].define(version: 2025_09_10_194612) do
+  create_table "expense_shares", force: :cascade do |t|
+    t.integer "expense_id", null: false
+    t.integer "user_id", null: false
+    t.decimal "amount_owed"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["expense_id"], name: "index_expense_shares_on_expense_id"
+    t.index ["user_id"], name: "index_expense_shares_on_user_id"
+  end
+
   create_table "expenses", force: :cascade do |t|
     t.string "description"
     t.decimal "amount"
@@ -33,5 +43,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_10_191625) do
     t.datetime "updated_at", null: false
   end
 
+  add_foreign_key "expense_shares", "expenses"
+  add_foreign_key "expense_shares", "users"
   add_foreign_key "expenses", "users", column: "paid_by_id"
 end

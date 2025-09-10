@@ -16,6 +16,11 @@ class ExpensesController < ApplicationController
     @expense = Expense.new(expense_params)
 
     if @expense.save
+      if params[:expense][:user_ids].present?
+        selected_users = User.where(id: params[:expense][:user_ids])
+        @expense.split_equally_among(selected_users)
+      end
+
       redirect_to @expense, notice: 'Expense was successfully created.'
     else
       render :new, status: :unprocessable_entity
@@ -45,6 +50,6 @@ class ExpensesController < ApplicationController
   end
 
   def expense_params
-    params.require(:expense).permit(:description, :amount, :date, :paid_by_id)
+    params.require(:expense).permit(:description, :amount, :date, :paid_by_id, user_ids: [])
   end
 end

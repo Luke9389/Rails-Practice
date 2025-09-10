@@ -233,6 +233,12 @@ This is a hands-on learning plan for building a Splitwise-like expense sharing a
 - `config/routes.rb` - Add API namespace
 - `app/controllers/api/` - JSON controllers
 
+#### Step 27.5: Refactor JavaScript to Stimulus (Rails 7+ way)
+**Files**:
+- `app/javascript/controllers/expense_form_controller.js` - Move inline JS to Stimulus controller
+- Update `app/views/expenses/_form.html.erb` to use Stimulus data attributes
+- **Rails Context**: Stimulus is Rails' preferred way to handle JavaScript interactions
+
 ## Testing Strategy
 - Write model specs first (validations, associations, methods)
 - Add request specs for controller actions
@@ -262,3 +268,21 @@ This is a hands-on learning plan for building a Splitwise-like expense sharing a
 - Improve UI with Bootstrap or Tailwind
 - Add email notifications
 - Deploy to Heroku/Railway
+
+## Advanced Features (Polish Phase)
+
+#### Step 28: Fix Money Precision & Extra Cents Handling
+**Problem**: $10 split 3 ways = $3.33333... but you can only pay $3.33
+**Files to modify**:
+- Create migration to add `precision: 8, scale: 2` to amount fields
+- Update `split_equally_among` method in `app/models/expense.rb` to handle rounding
+- Ensure total always equals expense amount by giving extra cents to first user
+
+#### Step 29: Charity Gamification Feature
+**Concept**: Users who get extra cents can opt to donate them to charity, with Splitwise matching donations
+**Files to create**:
+- `CharityDonation` model (user_id, amount_extra_cents, matched_amount, charity_name)
+- Add `has_many :charity_donations` to User model
+- Create charity donation controller and views
+- Add "Donate extra cents" option when viewing balances
+**Business logic**: Track cumulative extra cents, allow donation when threshold reached (e.g., $1.00)
