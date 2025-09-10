@@ -1,0 +1,31 @@
+<h1>All Expenses</h1>
+
+<%= link_to 'New Expense', new_expense_path, class: 'btn btn-primary' %>
+
+<table>
+  <thead>
+    <tr>
+      <th>Description</th>
+      <th>Amount</th>
+      <th>Date</th>
+      <th>Paid By</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @expenses.each do |expense| %>
+      <tr>
+        <td><%= expense.description %></td>
+        <td>$<%= expense.amount %></td>
+        <td><%= expense.date.strftime("%B %d, %Y") %></td>
+        <td><%= expense.paid_by.name %></td>
+        <td>
+          <%= link_to 'Show', expense %>
+          <%= link_to 'Edit', edit_expense_path(expense) %>
+          <%= link_to 'Delete', expense, data: { turbo_method: :delete },
+                      confirm: 'Are you sure?' %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
