@@ -4,6 +4,8 @@ class User < ApplicationRecord
   validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }
   normalizes :email, with: ->(e) { e.strip.downcase }
 
+  enum :role, { member: 0, admin: 1, premium: 2 }
+
   has_secure_password
   has_many :sessions, dependent: :destroy
 
@@ -23,6 +25,14 @@ class User < ApplicationRecord
     total_paid - total_owed
   end
 
+  def can_view_all_expenses?
+    admin?
+  end
+
+  def can_manage_users?
+    admin?
+  end
+
   def balance_with(other_user)
     paid_for_other = paid_expenses.joins(:expense_shares)
                                   .where(expense_shares: { user: other_user })
@@ -38,7 +48,7 @@ class User < ApplicationRecord
   def all_related_expenses
     # Expenses user paid for OR has shares in
     Expense.left_joins(:expense_shares)
-           .where("paid_by_id = ? OR expense_shares.user_id = ?", id, id)
+           .where('paid_by_id = ? OR expense_shares.user_id = ?', id, id)
            .distinct
   end
 end

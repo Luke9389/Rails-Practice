@@ -1,0 +1,41 @@
+<div class="container">
+  <h1>Admin Dashboard</h1>
+
+  <div class="row mb-4">
+    <div class="col-md-3">
+      <div class="card">
+        <div class="card-body text-center">
+          <h3><%= @total_users %></h3>
+          <p>Total Users</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card">
+        <div class="card-body text-center">
+          <h3><%= @total_expenses %></h3>
+          <p>Total Expenses</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card">
+        <div class="card-body text-center">
+          <h3>$<%= @total_amount_tracked %></h3>
+          <p>Total Tracked</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-6">
+      <h3>Recent Expenses</h3>
+      <!-- List recent expenses -->
+    </div>
+    <div class="col-md-6">
+      <h3>Recent Users</h3>
+      <!-- List recent users -->
+    </div>
+  </div>
+</div>

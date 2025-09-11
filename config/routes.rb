@@ -25,4 +25,10 @@ Rails.application.routes.draw do
     resources :expenses, only: %i[index show create]
     resources :users, only: [:show]
   end
+
+  namespace :admin do
+    resources :users
+    resources :expenses
+    get 'dashboard', to: 'dashboard#index'
+  end
 end
