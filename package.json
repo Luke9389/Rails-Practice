@@ -1,0 +1,23 @@
+{
+  "name": "app",
+  "private": true,
+  "devDependencies": {
+    "esbuild": "^0.25.9"
+  },
+  "scripts": {
+    "build": "esbuild app/javascript/*.* --bundle --sourcemap --format=esm --outdir=app/assets/builds --public-path=/assets"
+  },
+  "dependencies": {
+    "@hotwired/stimulus": "^3.2.2",
+    "@hotwired/stimulus-webpack-helpers": "^1.0.1",
+    "@hotwired/turbo-rails": "^8.0.16",
+    "@tailwindcss/cli": "^4.1.13",
+    "@tailwindcss/typography": "^0.5.16",
+    "apexcharts": "^5.3.5",
+    "flatpickr": "^4.6.13",
+    "hotkeys-js": "^3.13.15",
+    "stimulus-use": "^0.52.3",
+    "tailwindcss": "^4.1.13",
+    "tippy.js": "^6.3.7"
+  }
+}

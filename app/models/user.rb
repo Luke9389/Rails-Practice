@@ -2,9 +2,12 @@ class User < ApplicationRecord
   validates :name, presence: true
   validates :email, presence: true, uniqueness: true
   validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }
+  normalizes :email, with: ->(e) { e.strip.downcase }
+
+  has_secure_password
+  has_many :sessions, dependent: :destroy
 
   has_many :paid_expenses, class_name: 'Expense', foreign_key: 'paid_by_id'
-
   has_many :expense_shares, dependent: :destroy
   has_many :shared_expenses, through: :expense_shares, source: :expense
 
@@ -30,5 +33,12 @@ class User < ApplicationRecord
                                   .sum(:amount_owed)
 
     paid_for_other - owed_to_other
+  end
+
+  def all_related_expenses
+    # Expenses user paid for OR has shares in
+    Expense.left_joins(:expense_shares)
+           .where("paid_by_id = ? OR expense_shares.user_id = ?", id, id)
+           .distinct
   end
 end

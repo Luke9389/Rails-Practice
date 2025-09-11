@@ -37,10 +37,10 @@ export default class extends Controller {
   }
 
   showWarning() {
-    this.warningTarget.style.display = 'block'
+    this.warningTarget.classList.remove('hidden')
   }
 
   hideWarning() {
-    this.warningTarget.style.display = 'none'
+    this.warningTarget.classList.add('hidden')
   }
 }
