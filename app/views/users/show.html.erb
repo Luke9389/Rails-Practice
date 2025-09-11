@@ -29,6 +29,29 @@
   </p>
 </div>
 
+<% if @user.charity_donations.any? %>
+  <h3>Charity Impact 🎉</h3>
+  <p>Every extra penny you pay gets matched and donated to charity!</p>
+
+  <div class="charity-donations">
+    <p>
+      <strong>Total donations generated: $<%= @user.charity_donations.sum(:amount_cents) / 100.0 %></strong>
+      (Your extra pennies + Splitwise matching)
+    </p>
+
+    <h4>Recent Donations:</h4>
+    <ul>
+      <% @user.charity_donations.includes(:expense_share => :expense).limit(5).each do |donation| %>
+        <li>
+          <%= donation.charity_name %> -
+          <%= donation.amount_cents %> cents
+          (from <%= donation.expense_share.expense.description %>)
+        </li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
+
 <div>
   <%= link_to 'Edit', edit_user_path(@user) %>
   <%= link_to 'Delete', @user, data: { turbo_method: :delete },

@@ -10,8 +10,11 @@ class User < ApplicationRecord
   has_many :sessions, dependent: :destroy
 
   has_many :paid_expenses, class_name: 'Expense', foreign_key: 'paid_by_id'
+
   has_many :expense_shares, dependent: :destroy
   has_many :shared_expenses, through: :expense_shares, source: :expense
+
+  has_many :charity_donations, through: :expense_shares
 
   def total_paid
     paid_expenses.sum(:amount)

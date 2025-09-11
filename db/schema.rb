@@ -10,7 +10,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_09_11_033516) do
+ActiveRecord::Schema[8.0].define(version: 2025_09_11_173328) do
+  create_table "charity_donations", force: :cascade do |t|
+    t.integer "amount_cents"
+    t.string "charity_name"
+    t.integer "expense_share_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["expense_share_id"], name: "index_charity_donations_on_expense_share_id"
+  end
+
   create_table "expense_shares", force: :cascade do |t|
     t.integer "expense_id", null: false
     t.integer "user_id", null: false
@@ -55,6 +64,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_11_033516) do
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 
+  add_foreign_key "charity_donations", "expense_shares"
   add_foreign_key "expense_shares", "expenses"
   add_foreign_key "expense_shares", "users"
   add_foreign_key "expenses", "users", column: "paid_by_id"
